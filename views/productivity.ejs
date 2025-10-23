@@ -1,0 +1,112 @@
+<%- include("layout") %>
+
+<main>
+  <section class="zone productivity">
+    <h2><i class="fa-solid fa-clock"></i> Productivity Toolkit</h2>
+    <p>Plan your day, set due times, and track your progress.</p>
+
+    <!-- ===== Add Task Form ===== -->
+    <form action="/productivity/add" method="POST" class="task-form">
+      <input
+        type="text"
+        name="task"
+        placeholder="Add a new task ..."
+        required
+      />
+      <input
+        type="datetime-local"
+        name="due"
+        required
+      />
+      <button type="submit" class="add-btn">
+        <i class="fa-solid fa-plus"></i> Add
+      </button>
+    </form>
+
+    <!-- ===== Progress Summary ===== -->
+    <div class="progress-box">
+      <% const percent = tasks.length ? Math.round((completedTasks / tasks.length) * 100) : 0; %>
+      <p>
+        Completed Tasks:
+        <strong><%= completedTasks %> / <%= tasks.length %></strong>
+      </p>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:<%= percent %>%"></div>
+      </div>
+      <span class="percent"><%= percent %>% Done</span>
+    </div>
+
+    <!-- ===== Task List ===== -->
+    <div class="task-list">
+      <% if (tasks.length === 0) { %>
+        <p class="no-tasks">✨ No tasks yet — add one above.</p>
+      <% } else { %>
+        <% tasks.forEach(function(t, i){ %>
+          <div class="task-card <%= t.done ? 'done' : '' %>" data-duetime="<%= t.due %>">
+            <div class="task-header">
+              <span class="task-title"><%= t.task %></span>
+
+              <div class="actions">
+                <% if (!t.done) { %>
+                  <form action="/productivity/markdone" method="POST">
+                    <input type="hidden" name="index" value="<%= i %>">
+                    <button type="submit" class="done-btn">
+                      <i class="fa-solid fa-check"></i> Done
+                    </button>
+                  </form>
+                <% } else { %>
+                  <span class="status">✅ Completed</span>
+                <% } %>
+
+                <form
+                  action="/productivity/delete"
+                  method="POST"
+                  onsubmit="return confirm('Delete this task?')"
+                >
+                  <input type="hidden" name="index" value="<%= i %>" />
+                  <button type="submit" class="delete-btn">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <% if (t.due) { %>
+              <p class="due">
+                <i class="fa-regular fa-hourglass-half"></i>
+                Due: <%= new Date(t.due).toLocaleString() %>
+              </p>
+              <p class="countdown"></p>
+            <% } %>
+          </div>
+        <% }); %>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Countdown + overdue updater
+  function updateCountdowns() {
+    const now = new Date().getTime();
+    document.querySelectorAll(".task-card").forEach(card => {
+      const dueTime = card.dataset.duetime;
+      const countdownEl = card.querySelector(".countdown");
+      if (!dueTime || !countdownEl) return;
+
+      const diff = new Date(dueTime).getTime() - now;
+      if (diff <= 0 && !card.classList.contains("done")) {
+        card.classList.add("overdue");
+        countdownEl.textContent = "⚠️ Overdue!";
+        countdownEl.style.color = "red";
+      } else if (!card.classList.contains("done")) {
+        const hrs = Math.floor(diff / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+        countdownEl.textContent = `🕒 ${hrs}h ${mins}m ${secs}s remaining`;
+      }
+    });
+  }
+  updateCountdowns();
+  setInterval(updateCountdowns, 1000);
+</script>

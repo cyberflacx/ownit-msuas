@@ -1,0 +1,108 @@
+<%- include("layout") %>
+
+<main>
+  <section class="zone wellness">
+    <h2><i class="fa-solid fa-heart-pulse"></i> Mental Wellness Zone</h2>
+    <p>Take charge of your mental wellbeing — track your mood, reach out for help, and learn more about support services.</p>
+
+    <!-- ===== Mood Tracker Form ===== -->
+   <form action="/wellness/mood" method="POST" class="mood-form">
+  <label><i class="fa-solid fa-face-smile"></i> How do you feel today?</label>
+
+  <div class="mood-options">
+    <input type="radio" id="happy" name="mood" value="😊 Happy" required />
+    <label for="happy" class="mood-btn happy"><i class="fa-solid fa-face-laugh-beam"></i> Happy</label>
+
+    <input type="radio" id="okay" name="mood" value="😐 Okay" />
+    <label for="okay" class="mood-btn okay"><i class="fa-solid fa-face-meh"></i> Okay</label>
+
+    <input type="radio" id="sad" name="mood" value="😞 Sad" />
+    <label for="sad" class="mood-btn sad"><i class="fa-solid fa-face-frown"></i> Sad</label>
+
+    <input type="radio" id="stressed" name="mood" value="😤 Stressed" />
+    <label for="stressed" class="mood-btn stressed"><i class="fa-solid fa-face-angry"></i> Stressed</label>
+
+    <input type="radio" id="tired" name="mood" value="😴 Tired" />
+    <label for="tired" class="mood-btn tired"><i class="fa-solid fa-face-tired"></i> Tired</label>
+  </div>
+
+  <button type="submit" class="save-btn"><i class="fa-solid fa-check"></i> Save Mood</button>
+</form>
+
+    <% if (mood) { %>
+      <p class="mood-display">
+        Last mood recorded: <strong><%= mood.mood %></strong> on <%= new Date(mood.date).toLocaleDateString() %>
+      </p>
+    <% } %>
+
+    <!-- ===== Wellness Resources ===== -->
+    <div class="wellness-grid">
+      <!-- Card 1: Mental Health Support -->
+      <div class="wellness-card">
+        <i class="fa-solid fa-brain"></i>
+        <h3>Mental Health Support</h3>
+        <p>Access professional resources on depression, anxiety, and emotional resilience.</p>
+        <a href="https://www.who.int/health-topics/mental-health" target="_blank">
+          Visit WHO Mental Health <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+
+      <!-- Card 2: Suicide Prevention -->
+      <div class="wellness-card">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+        <h3>Suicide Prevention</h3>
+        <p>If you or someone you know needs help, reach out now — you’re not alone.</p>
+        <a href="https://findahelpline.com/" target="_blank">
+          Find a Helpline <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+
+      <!-- Card 3: Report Abuse -->
+      <div class="wellness-card report-card" onclick="openReportForm()">
+        <i class="fa-solid fa-bullhorn"></i>
+        <h3>Report Abuse or Violence</h3>
+        <p>Submit an anonymous report about gender-based or sexual abuse incidents.</p>
+        <button type="button"><i class="fa-solid fa-paper-plane"></i> Report Now</button>
+      </div>
+
+      <!-- Card 4: Gender-Based Violence Awareness -->
+      <div class="wellness-card">
+        <i class="fa-solid fa-venus-mars"></i>
+        <h3>Gender-Based Violence Awareness</h3>
+        <p>Learn about GBV and get access to safe resources for survivors and advocates.</p>
+        <a href="https://www.unwomen.org/en/what-we-do/ending-violence-against-women" target="_blank">
+          Learn More at UN Women <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- ===== Hidden Report Modal ===== -->
+    <div id="reportModal" class="modal hidden">
+      <div class="modal-content">
+        <h3><i class="fa-solid fa-shield-heart"></i> Report Abuse</h3>
+        <p>All submissions are anonymous. Your voice matters — together we can stop abuse.</p>
+        <form id="reportForm">
+          <textarea placeholder="Describe the incident..." required></textarea>
+          <button type="submit"><i class="fa-solid fa-paper-plane"></i> Submit Report</button>
+          <button type="button" onclick="closeReportForm()" class="close-btn"><i class="fa-solid fa-xmark"></i> Cancel</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // ==== Interactive Report Modal ====
+  function openReportForm() {
+    document.getElementById("reportModal").classList.remove("hidden");
+  }
+  function closeReportForm() {
+    document.getElementById("reportModal").classList.add("hidden");
+  }
+
+  document.getElementById("reportForm")?.addEventListener("submit", e => {
+    e.preventDefault();
+    alert("✅ Report submitted anonymously. Thank you for speaking up.");
+    closeReportForm();
+  });
+</script>

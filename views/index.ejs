@@ -1,0 +1,123 @@
+<%- include("layout") %>
+
+<main>
+  <section class="hero">
+    <h2><i class="fa-solid fa-brain"></i> Own Your Mind. Own Your Health. Own Your Success.</h2>
+    <p>Empowering MSUAS students to balance academics, health, and wellbeing.</p>
+    <div class="buttons">
+      <a href="/wellness" class="btn"><i class="fa-solid fa-heart-pulse"></i> Explore Wellness</a>
+      <a href="/library" class="btn btn-outline"><i class="fa-solid fa-book-open"></i> Browse Learning</a>
+    </div>
+  </section>
+
+  <section class="dashboard">
+    <h2><i class="fa-solid fa-chart-column"></i> Your Dashboard</h2>
+
+    <!-- Insights Summary with Charts -->
+    <div class="summary">
+      <h3><i class="fa-solid fa-lightbulb"></i> Insights Summary</h3>
+
+      <div class="charts">
+        <div class="chart-item">
+          <canvas id="moodChart"></canvas>
+          <p><i class="fa-solid fa-face-smile"></i> Mood Trends</p>
+        </div>
+
+        <div class="chart-item">
+          <canvas id="taskChart"></canvas>
+          <p><i class="fa-solid fa-list-check"></i> Task Completion</p>
+        </div>
+
+        <div class="chart-item">
+          <canvas id="communityChart"></canvas>
+          <p><i class="fa-solid fa-users"></i> Community Engagement</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div class="dash-grid">
+      <div class="dash-card">
+        <h3><i class="fa-solid fa-leaf"></i> Wellness</h3>
+        <% if (latestMood) { %>
+          <p>Last mood: <strong><%= latestMood.mood %></strong></p>
+        <% } else { %>
+          <p>No mood recorded yet.</p>
+        <% } %>
+        <p>Total logs: <%= moodCount %></p>
+      </div>
+
+      <div class="dash-card">
+        <h3><i class="fa-solid fa-clock"></i> Productivity</h3>
+        <p><%= completedTasks %> / <%= taskCount %> tasks completed</p>
+      </div>
+
+      <div class="dash-card">
+        <h3><i class="fa-solid fa-book"></i> Library</h3>
+        <p><%= resourceCount %> saved resources</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  // Guard against undefined server vars (very defensive)
+  const MOOD_LABELS = Array.isArray(<%- moodLabels || "[]" %>) ? <%- moodLabels || "[]" %> : [];
+  const MOOD_VALUES = Array.isArray(<%- moodValues || "[]" %>) ? <%- moodValues || "[]" %> : [];
+
+  // ===== Mood Trends (Line) =====
+  const moodCtx = document.getElementById('moodChart').getContext('2d');
+  new Chart(moodCtx, {
+    type: 'line',
+    data: {
+      labels: MOOD_LABELS,
+      datasets: [{
+        label: 'Mood Score (1–5)',
+        data: MOOD_VALUES,
+        borderColor: '#8B1C1C',
+        backgroundColor: 'rgba(139,28,28,0.2)',
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: { y: { min: 0, max: 5, ticks: { stepSize: 1 } } }
+    }
+  });
+
+  // ===== Task Completion (Doughnut) =====
+  const taskCtx = document.getElementById('taskChart').getContext('2d');
+  new Chart(taskCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Completed', 'Pending'],
+      datasets: [{
+        data: [<%= completedTasks %>, <%= Math.max(0, taskCount - completedTasks) %>],
+        backgroundColor: ['#0E4B33', '#C29E37']
+      }]
+    },
+    options: {
+      cutout: '70%',
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+
+  // ===== Community Engagement (Bar) =====
+  const communityCtx = document.getElementById('communityChart').getContext('2d');
+  new Chart(communityCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Posts', 'Resources'],
+      datasets: [{
+        label: 'Community Activity',
+        data: [<%= postCount %>, <%= resourceCount %>],
+        backgroundColor: ['#207E68', '#245C8B']
+      }]
+    },
+    options: {
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+</script>

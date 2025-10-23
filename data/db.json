@@ -1,0 +1,39 @@
+{
+  "moods": [
+    {
+      "mood": "😤 Stressed",
+      "date": "2025-10-23T20:07:28.593Z"
+    },
+    {
+      "mood": "😊 Happy",
+      "date": "2025-10-23T22:07:10.229Z"
+    }
+  ],
+  "tasks": [
+    {
+      "task": "assignmrnt",
+      "done": false
+    },
+    {
+      "username": "cyberflacx",
+      "task": "assignmrnt",
+      "done": true,
+      "due": "2025-10-24T03:19",
+      "created": "2025-10-23T22:19:58.498Z"
+    }
+  ],
+  "resources": [],
+  "posts": [
+    {
+      "text": "keep studying guys",
+      "user": "Guest",
+      "date": "2025-10-23T22:03:06.395Z"
+    }
+  ],
+  "users": [
+    {
+      "username": "cyberflacx",
+      "passwordHash": "$2b$10$Iz8CBoMaEbqF8wn4fwrFLOxLj0y102Euw12bnBatzp6PArBrH8VYW"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+<%- include("layout") %>
+
+<main>
+  <section class="zone library">
+    <h2><i class="fa-solid fa-book-open"></i> Open Learning Library</h2>
+    <p>
+      Discover freely available academic papers, technical manuals, and educational resources from open-access platforms.
+    </p>
+
+    <!-- ===== Search Bar ===== -->
+    <form action="/library" method="get" class="search-form">
+      <input
+        type="text"
+        name="q"
+        value="<%= query || '' %>"
+        placeholder="Search for open-access topics…"
+        required
+      />
+      <button type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i> Search
+      </button>
+    </form>
+
+    <!-- ===== Intro Cards ===== -->
+    <div class="library-grid">
+      <div class="lib-card">
+        <i class="fa-solid fa-university"></i>
+        <h3>Open Education Global</h3>
+        <p>Browse a worldwide collection of open courses, textbooks, and teaching tools.</p>
+        <a href="https://www.oeglobal.org/" target="_blank" rel="noopener noreferrer">
+          Visit Site <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+
+      <div class="lib-card">
+        <i class="fa-solid fa-flask"></i>
+        <h3>Zenodo Research Repository</h3>
+        <p>Access scientific data, journal articles, and publications shared by global researchers.</p>
+        <a href="https://zenodo.org/" target="_blank" rel="noopener noreferrer">
+          Explore Zenodo <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+
+      <div class="lib-card">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <h3>Directory of Open Access Journals</h3>
+        <p>Read over 20 000 peer-reviewed journals across all disciplines — 100 % free.</p>
+        <a href="https://doaj.org/" target="_blank" rel="noopener noreferrer">
+          Visit DOAJ <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- ===== Dynamic Research Results ===== -->
+    <div class="library-results">
+      <h3><i class="fa-solid fa-globe"></i> Open-Access Research Results</h3>
+
+      <% if (results && results.length > 0) { %>
+        <div class="research-list">
+          <% results.forEach(function(r){ %>
+            <div class="research-card">
+              <h4><%= r.title %></h4>
+              <p><strong>Authors:</strong> <%= r.creators %></p>
+              <% if (r.link) { %>
+                <a
+                  href="<%- r.link %>"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="view-link"
+                >
+                  <i class="fa-solid fa-up-right-from-square"></i> View Resource
+                </a>
+              <% } else { %>
+                <p><em>Link not available</em></p>
+              <% } %>
+            </div>
+          <% }); %>
+        </div>
+      <% } else if (query) { %>
+        <p>No results found for "<strong><%= query %></strong>". Try a different keyword.</p>
+      <% } else { %>
+        <p class="hint">Use the search bar above to find current open-access studies.</p>
+      <% } %>
+    </div>
+  </section>
+</main>

@@ -1,0 +1,72 @@
+<%- include("layout") %>
+
+<main>
+  <section class="zone community">
+    <!-- ===== Intro Section ===== -->
+    <div class="intro">
+      <h2><i class="fa-solid fa-users"></i> MSUAS Community Space</h2>
+      <p>
+        A place for students to connect, share inspiration, and support one another.  
+        Together we <strong>Own It</strong> — mind, body, and success.
+      </p>
+    </div>
+
+    <!-- ===== Wallpaper Cards (4) ===== -->
+    <div class="wall-grid">
+      <div class="wall-card" id="wall1">
+        <div class="overlay">
+          <h3>💬 Share Your Journey</h3>
+          <p>Post achievements, quotes, or learning moments.</p>
+        </div>
+      </div>
+
+      <div class="wall-card" id="wall2">
+        <div class="overlay">
+          <h3>🌍 Inspire the Tribe</h3>
+          <p>Encourage others through creativity and innovation.</p>
+        </div>
+      </div>
+
+      <div class="wall-card" id="wall3">
+        <div class="overlay">
+          <h3>🎓 Campus Moments</h3>
+          <p>Snapshots that celebrate life and progress at MSUAS.</p>
+        </div>
+      </div>
+
+      <div class="wall-card" id="wall4">
+        <div class="overlay">
+          <h3>🤝 Team Spirit</h3>
+          <p>Together we achieve more — collaboration in motion.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Interaction Panel ===== -->
+    <div class="community-panel">
+      <h3><i class="fa-solid fa-comments"></i> Student Interaction Panel</h3>
+      <form action="/community/post" method="POST" class="post-form">
+        <textarea
+          name="message"
+          placeholder="Share something positive or inspiring..."
+          maxlength="200"
+          required
+        ></textarea>
+        <button type="submit"><i class="fa-solid fa-paper-plane"></i> Post</button>
+      </form>
+
+      <div class="posts">
+        <% if (posts && posts.length > 0) { %>
+          <% posts.slice(-5).reverse().forEach(function(p){ %>
+            <div class="post-card">
+              <p><%= p.text %></p>
+              <span class="meta">🧑 <%= p.user || 'Anonymous' %> | <%= new Date(p.date).toLocaleString() %></span>
+            </div>
+          <% }); %>
+        <% } else { %>
+          <p class="placeholder">No posts yet — be the first to share!</p>
+        <% } %>
+      </div>
+    </div>
+  </section>
+</main>

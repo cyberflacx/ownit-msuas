@@ -1,0 +1,128 @@
+<%- include("layout") %>
+
+<main>
+  <section class="zone srhr">
+    <h2><i class="fa-solid fa-venus-mars"></i> SRHR Connect</h2>
+    <p>
+      Access reliable Sexual and Reproductive Health & Rights resources,
+      open-access research, and support services.
+    </p>
+
+    <!-- ===== Search Open Access SRHR Research ===== -->
+    <form action="/srhr" method="get" class="search-form">
+      <input
+        type="text"
+        name="q"
+        value="<%= query || '' %>"
+        placeholder="Search open-access SRHR research..."
+        required
+      />
+      <button type="submit">
+        <i class="fa-solid fa-magnifying-glass"></i> Search
+      </button>
+    </form>
+
+    <!-- ===== Static Resource Cards ===== -->
+    <div class="srhr-grid">
+      <div class="srhr-card">
+        <i class="fa-solid fa-hand-holding-heart"></i>
+        <h3>UNFPA SRHR Resources</h3>
+        <p>
+          Learn more about sexual and reproductive health from the United Nations Population Fund.
+        </p>
+        <a
+          href="https://www.unfpa.org/sexual-reproductive-health"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Visit UNFPA Website
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+
+      <div class="srhr-card">
+        <i class="fa-solid fa-heart-pulse"></i>
+        <h3>WHO SRHR Information</h3>
+        <p>
+          Access the World Health Organization’s open library on reproductive and sexual wellbeing.
+        </p>
+        <a
+          href="https://www.who.int/health-topics/sexual-health"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          WHO Sexual Health
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+
+      <div class="srhr-card">
+        <i class="fa-solid fa-book-open-reader"></i>
+        <h3>UNESCO SRHR Education</h3>
+        <p>
+          Comprehensive sexuality education and guidance materials from UNESCO’s open-access collections.
+        </p>
+        <a
+          href="https://unesdoc.unesco.org/search/?q=sexual%20health"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Explore UNESCO Library
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+
+      <div class="srhr-card">
+        <i class="fa-solid fa-handshake-angle"></i>
+        <h3>Support and Helplines</h3>
+        <p>
+          Find hotlines and counselling for gender-based violence, reproductive health, and sexual abuse.
+        </p>
+        <a
+          href="https://findahelpline.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Find a Helpline
+          <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- ===== Open Access SRHR Research Results ===== -->
+    <div class="srhr-results">
+      <h3><i class="fa-solid fa-globe"></i> Open Access SRHR Research</h3>
+
+      <% if (results && results.length > 0) { %>
+        <div class="research-list">
+          <% results.forEach(function(r){ %>
+            <div class="research-card">
+              <h4><%= r.title %></h4>
+              <p><strong>Authors:</strong> <%= r.creators %></p>
+              <% if (r.link) { %>
+                <a
+                  href="<%- r.link %>"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="view-link"
+                >
+                  <i class="fa-solid fa-up-right-from-square"></i> View on Zenodo
+                </a>
+              <% } else { %>
+                <p><em>Link not available</em></p>
+              <% } %>
+            </div>
+          <% }); %>   <!-- ✅ properly closed forEach -->
+        </div>
+      <% } else if (query) { %>
+        <p>
+          No open-access results found for "<strong><%= query %></strong>". Try another keyword.
+        </p>
+      <% } else { %>
+        <p class="hint">
+          Use the search bar above to discover recent SRHR research papers.
+        </p>
+      <% } %>
+    </div>
+  </section>
+</main>
