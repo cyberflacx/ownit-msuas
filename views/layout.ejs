@@ -28,6 +28,8 @@
       <a href="/library">Library</a>
       <a href="/productivity">Productivity</a>
       <a href="/community">Community</a>
+      <!--<a href="/chatbot">Chatbot</a> -->
+
     </nav>
   </header>
 
@@ -37,5 +39,136 @@
   </footer>
 
   <script src="/js/main.js"></script>
+  <!-- Floating Chatbot Icon -->
+<div id="chatbot-icon">💬</div>
+
+<!-- Chat Window -->
+<div id="chatbot-window">
+  <div id="chatbot-header">OwnIt Assistant</div>
+  <div id="chatbot-body"></div>
+  <div id="chatbot-input">
+    <input type="text" id="userInput" placeholder="Ask something...">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+  const icon = document.getElementById("chatbot-icon");
+  const windowBox = document.getElementById("chatbot-window");
+
+  icon.onclick = () => {
+    windowBox.style.display =
+      windowBox.style.display === "flex" ? "none" : "flex";
+  };
+
+  async function sendMessage() {
+    const input = document.getElementById("userInput");
+    const body = document.getElementById("chatbot-body");
+    const text = input.value.trim();
+    if (!text) return;
+
+    body.innerHTML += `<div class='user'>${text}</div>`;
+    input.value = "";
+    body.scrollTop = body.scrollHeight;
+
+    const res = await fetch("/chatbot", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+    const data = await res.json();
+    body.innerHTML += `<div class='bot'>${data.reply}</div>`;
+    body.scrollTop = body.scrollHeight;
+  }
+</script>
+
+<style>
+  /* Floating Chatbot Styles */
+  #chatbot-icon {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: #7d1b1b;
+    color: white;
+    font-size: 28px;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    transition: 0.3s;
+  }
+  #chatbot-icon:hover { background: #a12a2a; }
+
+  #chatbot-window {
+    position: fixed;
+    bottom: 100px;
+    right: 25px;
+    width: 320px;
+    height: 420px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    display: none;
+    flex-direction: column;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+    overflow: hidden;
+  }
+  #chatbot-header {
+    background: #7d1b1b;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    font-weight: bold;
+  }
+  #chatbot-body {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background: #f9f9f9;
+  }
+  #chatbot-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+  }
+  #chatbot-input input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  #chatbot-input button {
+    margin-left: 8px;
+    background: #7d1b1b;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .user {
+    background: #7d1b1b;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+    align-self: flex-end;
+    display: block;
+    text-align: right;
+  }
+  .bot {
+    background: #e9e9e9;
+    color: #333;
+    padding: 6px 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+    text-align: left;
+  }
+</style>
+
 </body>
 </html>

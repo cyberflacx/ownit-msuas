@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot | OwnIt.MSUAS</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { font-family: "Poppins", sans-serif; background: #fff; color: #333; }
+    .chatbox { width: 70%; margin: 60px auto; border: 1px solid #ccc; border-radius: 12px; padding: 20px; background: #fafafa; }
+    .messages { height: 300px; overflow-y: auto; padding: 10px; border: 1px solid #ddd; border-radius: 10px; background: #fff; }
+    .user { text-align: right; color: #fff; background: #7d1b1b; padding: 8px; border-radius: 10px; margin: 5px 0; display: inline-block; }
+    .bot { text-align: left; color: #333; background: #e9e9e9; padding: 8px; border-radius: 10px; margin: 5px 0; display: inline-block; }
+    input[type="text"] { width: 80%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; }
+    button { padding: 10px 20px; border: none; background: #7d1b1b; color: #fff; border-radius: 8px; cursor: pointer; }
+    button:hover { background: #a12a2a; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>OwnIt.MSUAS Chatbot</h1>
+    <nav><a href="/">🏠 Home</a></nav>
+  </header>
+
+  <div class="chatbox">
+    <div class="messages" id="chat"></div>
+    <div>
+      <input type="text" id="userInput" placeholder="Ask something...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("userInput");
+      const chat = document.getElementById("chat");
+      const message = input.value.trim();
+      if (!message) return;
+
+      chat.innerHTML += `<div class='user'>${message}</div>`;
+      input.value = "";
+
+      const res = await fetch("/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message })
+      });
+      const data = await res.json();
+      chat.innerHTML += `<div class='bot'>${data.reply}</div>`;
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>

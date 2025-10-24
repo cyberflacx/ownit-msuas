@@ -11,6 +11,9 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json()); // 👈 add this line
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 // ===== SESSION CONFIG =====
 app.use(
@@ -35,7 +38,7 @@ const libraryRoutes = require("./routes/library");
 const productivityRoutes = require("./routes/productivity");
 const communityRoutes = require("./routes/community");
 const authRoutes = require("./routes/auth"); // <— auth router with /login, /signup, /logout
-
+const chatbotRoutes = require("./routes/chatbot");
 // Only protect /productivity
 function requireLogin(req, res, next) {
   if (!req.session.user) return res.redirect("/login");
@@ -48,6 +51,7 @@ app.use("/wellness", wellnessRoutes);
 app.use("/srhr", srhrRoutes);
 app.use("/library", libraryRoutes);
 app.use("/community", communityRoutes);
+app.use("/chatbot", chatbotRoutes);
 
 // Auth endpoints (mounted at root so /login works)
 app.use("/", authRoutes);
